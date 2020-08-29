@@ -16,16 +16,17 @@ export class ProductsController {
   @Post()
   addProduct(
     @Body('title') productTitle: string,
-    @Body('descripton') productDescription: string,
+    @Body('description') productDescription: string,
     @Body('price') productPrice: number,
-  ): { id: string } {
+  ) {
     //Nao necessario especificar nesse caso
     const generatedID = this.productsService.insertProduct(
       productTitle,
       productDescription,
       productPrice,
     );
-    return { id: generatedID };
+    return generatedID;
+    //return { productTitle:  };
   }
 
   @Get()
