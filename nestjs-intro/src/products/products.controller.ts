@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch } from '@nestjs/common';
 import { ProductService } from './products.service';
 
 @Controller('products')
@@ -11,6 +11,7 @@ export class ProductsController {
     @Body('descripton') productDescription: string,
     @Body('price') productPrice: number,
   ): { id: string } {
+    //Nao necessario especificar nesse caso
     const generatedID = this.productsService.insertProduct(
       productTitle,
       productDescription,
@@ -27,5 +28,21 @@ export class ProductsController {
   @Get(':id')
   getProduct(@Param('id') prodId: string) {
     return this.productsService.getSingleProduct(prodId);
+  }
+
+  @Patch(':id')
+  updateProduct(
+    @Param('id') productId: string,
+    @Body('title') productTitle: string,
+    @Body('descripton') productDescription: string,
+    @Body('price') productPrice: number,
+  ) {
+    this.productsService.updateProduct(
+      productId,
+      productTitle,
+      productDescription,
+      productPrice,
+    );
+    return null;
   }
 }
