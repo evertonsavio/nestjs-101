@@ -96,11 +96,16 @@ export class ProductService {
     updatedProduct.save();
   }
 
+<<<<<<< HEAD
   /*     deleteProduct(prodId: string) {
+=======
+  /*   deleteProduct(prodId: string) {
+>>>>>>> b41d1ce82cd8d0299a418582bf5bb24a7a6d48df
     const [product, productIndex] = this.findId(prodId);
 
     this.products.splice(productIndex, 1);
   } */
+<<<<<<< HEAD
 
   async deleteProduct(prodId: string) {
     const result = await this.productModel.deleteOne({ _id: prodId }).exec();
@@ -108,6 +113,8 @@ export class ProductService {
       throw new NotFoundException('Nao encontramos o produto');
     }
   }
+=======
+>>>>>>> b41d1ce82cd8d0299a418582bf5bb24a7a6d48df
 
   private async findId(id: string) {
     let product;
