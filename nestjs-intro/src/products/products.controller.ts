@@ -56,7 +56,6 @@ export class ProductsController {
     return null;
   }
 
-<<<<<<< HEAD
   @Delete(':id')
   async removeProduct(
     @Param('id') productId: string,
@@ -64,11 +63,4 @@ export class ProductsController {
     await this.productsService.deleteProduct(productId);
     return { message: 'Deletado com sucesso' };
   }
-=======
-  /*   @Delete(':id')
-  removeProduct(@Param('id') productId: string): string {
-    this.productsService.deleteProduct(productId);
-    return 'Deletado com sucesso';
-  } */
->>>>>>> b41d1ce82cd8d0299a418582bf5bb24a7a6d48df
 }
