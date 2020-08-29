@@ -46,4 +46,21 @@ export class ProductService {
 
     this.products[productIndex] = updatedProduct;
   }
+
+  deleteProduct(prodId: string) {
+    const [product, productIndex] = this.findId(prodId);
+
+    this.products.splice(productIndex, 1);
+  }
+
+  findId(productId: string): [Product, number] {
+    const productIndex = this.products.findIndex(prod => prod.id === productId);
+    const product = this.products[productIndex];
+
+    if (!product) {
+      throw new NotFoundException('Nao encontramos o produto');
+    }
+
+    return [product, productIndex];
+  }
 }
