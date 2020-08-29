@@ -19,7 +19,7 @@ export class ProductService {
     });
     const result = await newProduct.save();
     console.log(result);
-    return 'prod_id';
+    return newProduct.id as string;
   }
 
   getProducts() {
