@@ -30,8 +30,9 @@ export class ProductsController {
   }
 
   @Get()
-  getAllProducts() {
-    return this.productsService.getProducts();
+  async getAllProducts() {
+    const products = await this.productsService.getProducts();
+    return products;
   }
 
   @Get(':id')
@@ -40,13 +41,13 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  updateProduct(
+  async updateProduct(
     @Param('id') productId: string,
     @Body('title') productTitle: string,
     @Body('descripton') productDescription: string,
     @Body('price') productPrice: number,
   ) {
-    this.productsService.updateProduct(
+    await this.productsService.updateProduct(
       productId,
       productTitle,
       productDescription,
@@ -56,8 +57,10 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  removeProduct(@Param('id') productId: string): string {
-    this.productsService.deleteProduct(productId);
-    return 'Deletado com sucesso';
+  async removeProduct(
+    @Param('id') productId: string,
+  ): Promise<{ message: string }> {
+    await this.productsService.deleteProduct(productId);
+    return { message: 'Deletado com sucesso' };
   }
 }

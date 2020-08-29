@@ -22,11 +22,30 @@ export class ProductService {
     return newProduct.id as string;
   }
 
-  getProducts() {
-    return [...this.products];
+  async getProducts() {
+    const products = await this.productModel.find().exec();
+    return products.map(prod => ({
+      id: prod.id,
+      title: prod.title,
+      description: prod.description,
+      price: prod.price,
+    }));
   }
 
-  getSingleProduct(productId: string): {} {
+  async getSingleProduct(id: string): Promise<Product> {
+    let product: Product;
+    try {
+      product = await this.productModel.findById(id);
+    } catch (err) {
+      throw new NotFoundException('Nao encontramos o produto');
+    }
+    if (!product) {
+      throw new NotFoundException('Nao encontramos o produto');
+    }
+
+    return product;
+  }
+  /*   getSingleProduct(productId: string): {} {
     const product = this.products.find(prod => prod.id === productId);
 
     if (!product) {
@@ -34,8 +53,8 @@ export class ProductService {
     }
 
     return { ...product };
-  }
-  updateProduct(productId: string, title: string, desc: string, price: number) {
+  } */
+  /* updateProduct(productId: string, title: string, desc: string, price: number) {
     const productIndex = this.products.findIndex(prod => prod.id === productId);
     const product = this.products[productIndex];
 
@@ -54,22 +73,53 @@ export class ProductService {
     }
 
     this.products[productIndex] = updatedProduct;
+  } */
+
+  async updateProduct(
+    productId: string,
+    title: string,
+    desc: string,
+    price: number,
+  ) {
+    const updatedProduct = await this.findId(productId);
+
+    if (title) {
+      updatedProduct.title = title;
+    }
+    if (desc) {
+      updatedProduct.description = desc;
+    }
+    if (price) {
+      updatedProduct.price = price;
+    }
+
+    updatedProduct.save();
   }
 
-  deleteProduct(prodId: string) {
+  /*     deleteProduct(prodId: string) {
     const [product, productIndex] = this.findId(prodId);
 
     this.products.splice(productIndex, 1);
+  } */
+
+  async deleteProduct(prodId: string) {
+    const result = await this.productModel.deleteOne({ _id: prodId }).exec();
+    if (result.n === 0) {
+      throw new NotFoundException('Nao encontramos o produto');
+    }
   }
 
-  findId(productId: string): [Product, number] {
-    const productIndex = this.products.findIndex(prod => prod.id === productId);
-    const product = this.products[productIndex];
-
+  private async findId(id: string) {
+    let product;
+    try {
+      product = await this.productModel.findById(id);
+    } catch (err) {
+      throw new NotFoundException('Nao encontramos o produto');
+    }
     if (!product) {
       throw new NotFoundException('Nao encontramos o produto');
     }
 
-    return [product, productIndex];
+    return product;
   }
 }
