@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './products.model';
 
 @Injectable()
@@ -6,7 +6,7 @@ export class ProductService {
   private products: Product[] = []; // LEMBRAR DE COLOCAR PRIVATE PRA SO O METODO ACESSAR
 
   insertProduct(title: string, desc: string, price: number): string {
-    const prodId = new Date().toString(); //dummy id
+    const prodId = Math.random().toString(); //dummy id
     const newProduct = new Product(prodId, title, desc, price);
     this.products.push(newProduct);
 
@@ -15,5 +15,15 @@ export class ProductService {
 
   getProducts() {
     return [...this.products];
+  }
+
+  getSingleProduct(productId: string): {} {
+    const product = this.products.find(prod => prod.id === productId);
+
+    if (!product) {
+      throw new NotFoundException('Nao encontramos o produto');
+    }
+
+    return { ...product };
   }
 }
